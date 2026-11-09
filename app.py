@@ -5,12 +5,14 @@ from datetime import datetime, timezone
 from db import verificar_conexao
 from livros import livros_bp
 from cadastro_livros import cadastro_bp
+from emprestimos import emprestimos_bp
 
 app = Flask(__name__)
 
 # Registro das rotas da API
 app.register_blueprint(livros_bp)
 app.register_blueprint(cadastro_bp)
+app.register_blueprint(emprestimos_bp)
 
 # Data e hora de inicializacao da aplicacao
 INICIADO_EM = datetime.now(timezone.utc).isoformat()
@@ -26,7 +28,8 @@ def inicio():
             "saude": "GET /health",
             "listar_livros": "GET /livros",
             "buscar_livros": "GET /livros?busca=termo",
-            "cadastrar_livro": "POST /livros"
+            "cadastrar_livro": "POST /livros",
+            "registrar_emprestimo": "POST /emprestimos"
         }
     }), 200
 
