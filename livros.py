@@ -1,5 +1,5 @@
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from db import conectar_banco
 import psycopg
 
@@ -9,6 +9,8 @@ livros_bp = Blueprint("livros", __name__)
 @livros_bp.route("/livros", methods=["GET"])
 def listar_livros():
     try:
+        busca = request.args.get("busca", "").strip()
+
         with conectar_banco() as conexao:
             with conexao.cursor() as cursor:
                 cursor.execute("""
@@ -25,9 +27,11 @@ def listar_livros():
                     FROM livros l
                     LEFT JOIN emprestimos e
                         ON e.livro_id = l.id
+                    WHERE l.titulo ILIKE %s
+                       OR l.autor ILIKE %s
                     GROUP BY l.id
                     ORDER BY l.titulo
-                """)
+                """, (f"%{busca}%", f"%{busca}%"))
 
                 colunas = [
                     coluna.name
