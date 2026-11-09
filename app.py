@@ -2,8 +2,10 @@
 from flask import Flask, jsonify
 from datetime import datetime, timezone
 from db import verificar_conexao
+from livros import livros_bp
 
 app = Flask(__name__)
+app.register_blueprint(livros_bp)
 
 INICIADO_EM = datetime.now(timezone.utc).isoformat()
 
