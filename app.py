@@ -1,12 +1,14 @@
 
-from flask import Flask, jsonify
 from datetime import datetime, timezone
+
+from flask import Flask, jsonify
 
 from db import verificar_conexao
 from livros import livros_bp
 from cadastro_livros import cadastro_bp
 from emprestimos import emprestimos_bp
 from devolucoes import devolucoes_bp
+from atrasados import atrasados_bp
 
 app = Flask(__name__)
 
@@ -15,6 +17,7 @@ app.register_blueprint(livros_bp)
 app.register_blueprint(cadastro_bp)
 app.register_blueprint(emprestimos_bp)
 app.register_blueprint(devolucoes_bp)
+app.register_blueprint(atrasados_bp)
 
 # Data e hora de inicializacao
 INICIADO_EM = datetime.now(timezone.utc).isoformat()
@@ -32,7 +35,8 @@ def inicio():
             "buscar_livros": "GET /livros?busca=termo",
             "cadastrar_livro": "POST /livros",
             "registrar_emprestimo": "POST /emprestimos",
-            "devolver_livro": "PATCH /emprestimos/<id>/devolver"
+            "devolver_livro": "PATCH /emprestimos/<id>/devolver",
+            "listar_atrasados": "GET /emprestimos/atrasados"
         }
     }), 200
 
