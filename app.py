@@ -1,6 +1,7 @@
 
 from flask import Flask, jsonify
 from datetime import datetime, timezone
+from db import verificar_conexao
 
 app = Flask(__name__)
 
@@ -18,11 +19,18 @@ def inicio():
 
 @app.route("/health", methods=["GET"])
 def health():
+    if verificar_conexao():
+        return jsonify({
+            "status": "ok",
+            "banco": "conectado",
+            "iniciado_em": INICIADO_EM
+        }), 200
+
     return jsonify({
-        "status": "api_iniciada",
-        "iniciado_em": INICIADO_EM,
-        "banco": "conexao_ainda_nao_implementada"
-    }), 200
+        "status": "indisponivel",
+        "banco": "sem_conexao",
+        "iniciado_em": INICIADO_EM
+    }), 503
 
 
 if __name__ == "__main__":
