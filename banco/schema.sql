@@ -29,5 +29,9 @@ CREATE TABLE emprestimos (
     emprestado_em TIMESTAMPTZ NOT NULL
         DEFAULT CURRENT_TIMESTAMP,
     previsto_para TIMESTAMPTZ NOT NULL,
-    devolvido_em TIMESTAMPTZ NULL
+    devolvido_em TIMESTAMPTZ NULL,
+    CONSTRAINT emprestimos_prazo_14_dias
+        CHECK (previsto_para - emprestado_em = INTERVAL '336 hours'),
+    CONSTRAINT emprestimos_devolucao_cronologica
+        CHECK (devolvido_em IS NULL OR devolvido_em >= emprestado_em)
 );
